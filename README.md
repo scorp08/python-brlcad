@@ -6,13 +6,13 @@ Compatible ctypesgen for py3:
 ## installing
 
 ```
-Sorry, not ready :(
+pip is not ready :(
 ```
 
 or
 
 ```
-git clone git@github.com:kanzure/python-brlcad.git
+git clone git@github.com:scorp08/python-brlcad.git
 cd python-brlcad/
 export BRLCAD_PATH=/usr/brlcad
 python setup.py install
@@ -39,13 +39,13 @@ nosetests
 
 ## usage
 
-Sorry, not yet. Check the `examples/` folder.
+Check the `examples/` folder.
 
 # Known to work with..
 
 Operating systems known to work:
 
-* linux distros
+
 * windows
 
 Support for Mac OS X is planned but not yet implemented or tested.
