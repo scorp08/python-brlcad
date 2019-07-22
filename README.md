@@ -1,13 +1,12 @@
-# python-brlcad
+# python3-brlcad
 
-Use [brlcad](http://brlcad.org/) from python based on ctypes bindings. These
-ctypes bindings are generated during install-time using
-[ctypesgen](https://github.com/kanzure/ctypesgen).
+Compatible ctypesgen for py3:
+[ctypesgen](https://github.com/olsonse/ctypesgen).
 
 ## installing
 
 ```
-pip install -U brlcad
+Sorry, not ready :(
 ```
 
 or
