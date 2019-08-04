@@ -4,7 +4,7 @@ Transformation matrices and operations using them.
 from numbers import Number
 
 import numpy as np
-from vector import Vector
+from .vector import Vector
 
 
 class Transform(np.matrix):

@@ -61,7 +61,7 @@ def create_property(name, context, param_wrapper, calc_func=None, doc=None):
     if not calc_func:
         calc_func = context.get("_calculate_{}".format(name))
     if calc_func:
-        if calc_func in calc_function_map.values():
+        if calc_func in list(calc_function_map.values()):
             raise BRLCADException(
                 "Programmer error: function {} is set up for parameter {}".format(calc_func, name)
             )
@@ -194,14 +194,14 @@ class GeometryObject(object):
         return value
 
     def _wrap_params(self, params):
-        unknown_params = set(params.keys()).difference(self.param_wrappers.keys())
+        unknown_params = set(params.keys()).difference(list(self.param_wrappers.keys()))
         if unknown_params:
             raise ValueError(
                 "Unknown {} parameters: {}".format(
                     self.__class__.__name__, unknown_params
                 )
             )
-        for param_name, value in params.items():
+        for param_name, value in list(params.items()):
             self._props[param_name] = self.wrap_param(param_name, value)
             self._param_status[param_name] = Initialized
 
@@ -212,7 +212,7 @@ class GeometryObject(object):
                 "Parameter set is not complete to fully define the geometry object: {}".format(self)
             )
         crt_props = dict(self._props)
-        for param_name, crt_value in crt_props.items():
+        for param_name, crt_value in list(crt_props.items()):
             calc_func = self.calc_function_map.get(param_name)
             if calc_func is not None:
                 calculated_value = calc_func(self)

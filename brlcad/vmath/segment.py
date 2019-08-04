@@ -3,8 +3,8 @@ Segment-based geometry.
 """
 import math
 from brlcad.vmath.geometry_object import GeometryObject, create_property
-from plane import Plane
-from vector import Vector
+from .plane import Plane
+from .vector import Vector
 import numpy as np
 
 

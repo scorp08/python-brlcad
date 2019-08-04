@@ -68,7 +68,7 @@ class Vector(np.ndarray):
                 result = result.astype(np.float64)
         else:
             if isinstance(data, str):
-                data = map(np.float64, data.split(','))
+                data = list(map(np.float64, data.split(',')))
             new_data = np.array(data, dtype=np.float64, copy=copy)
             if new_data.ndim > 1:
                 new_data = new_data.flatten()
@@ -271,7 +271,7 @@ class Vector(np.ndarray):
         result = length - len(other)
         if result:
             return result
-        for i in xrange(0, length):
+        for i in range(0, length):
             result = self[i] - other[i]
             if result:
                 return result

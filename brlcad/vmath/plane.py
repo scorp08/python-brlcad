@@ -2,7 +2,7 @@
 Maths related to plane geometry.
 """
 import collections
-from vector import Vector
+from .vector import Vector
 import numpy as np
 
 
