@@ -1,19 +1,19 @@
 # python-brlcad
-
+This is compatible with python 3.x.x .If there is an issue, please Pull
 Use [brlcad](http://brlcad.org/) from python based on ctypes bindings. These
-ctypes bindings are generated during install-time using
-[ctypesgen](https://github.com/kanzure/ctypesgen).
+ctypes bindings are generated during install-time using.
+[ctypesgen] is used from https://github.com/olsonse/ctypesgen.
 
 ## installing
 
 ```
-pip install -U brlcad
+pip is not ready :(
 ```
 
 or
 
 ```
-git clone git@github.com:kanzure/python-brlcad.git
+git clone git@github.com:scorp08/python-brlcad.git
 cd python-brlcad/
 export BRLCAD_PATH=/usr/brlcad
 python setup.py install
