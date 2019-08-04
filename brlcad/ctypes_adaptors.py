@@ -159,7 +159,7 @@ def plane_from_pointer(t):
 
 
 def transform_from_pointer(t):
-    return [t[x] for x in xrange(0, 16)]
+    return [t[x] for x in range(0, 16)]
 
 
 def array2d_from_pointer(t, num_rows, num_cols):

@@ -129,7 +129,7 @@ class GED(object):
             if not (result & libged.GED_MORE):
                 break
             prompt = self._ged_pointer.contents.ged_result_str.contents.vls_str
-            new_input = raw_input(prompt)
+            new_input = input(prompt)
             args.extend(new_input.split())
         if readline:
             # this code collapses the multiple history items resulting from
@@ -155,7 +155,7 @@ class GED(object):
         else:
             ged_output = self._ged_pointer.contents.ged_result_str.contents.vls_str
         if ged_output:
-            print ged_output
+            print(ged_output)
         return result
 
     @ged_command
@@ -383,7 +383,7 @@ def _construct_ged_commands(other_commands=_OTHER_COMMANDS):
     :param other_commands: commands to exclude from creating new functions for
     :type other_commands: list of strings
     """
-    for libgedkey in libged.__dict__.keys():
+    for libgedkey in list(libged.__dict__.keys()):
         # skip any unnamed functions
         if len(libgedkey) < len("ged_") + 1:
             continue

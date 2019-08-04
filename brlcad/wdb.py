@@ -4,7 +4,8 @@ Python wrapper for libwdb adapting python types to the needed ctypes structures.
 import os
 import fnmatch
 
-import brlcad._bindings.libwdb as libwdb
+#import brlcad._bindings.libwdb as libwdb
+from ._bindings import libwdb
 import brlcad._bindings.libbu as libbu
 from brlcad.vmath import Transform
 from brlcad.util import check_missing_params
@@ -30,7 +31,7 @@ def mk_wrap_primitive(primitive_class):
     def wrapper_func(mk_func):
         if primitive_class == primitives.Primitive:
             pass
-        elif SAVE_MAP.has_key(primitive_class) and SAVE_MAP[primitive_class] != mk_func:
+        elif primitive_class in SAVE_MAP and SAVE_MAP[primitive_class] != mk_func:
             raise BRLCADException(
                 "Bad setup, multiple save functions ({}, {}) assigned to primitive: {}".format(
                     mk_func, SAVE_MAP[primitive_class], primitive_class
@@ -41,11 +42,7 @@ def mk_wrap_primitive(primitive_class):
                 if len(args) == 1 and isinstance(args[0], primitives.Primitive):
                     shape = args[0]
                     if not isinstance(shape, primitive_class):
-                        raise(
-                            "{0} expects primitive of type {1} but got {2}".format(
-                                mk_func.func_name, primitive_class, type(shape)
-                            )
-                        )
+                        raise "{0} expects primitive of type {1} but got {2}"
                     shape.update_params(kwargs)
                     mk_func(db_self, shape.name, **kwargs)
                 else:
@@ -83,7 +80,7 @@ class WDB:
             raise BRLCADException("Can't open DB file <{0}>: {1}".format(db_file, e))
 
     def __iter__(self):
-        for i in xrange(0, libwdb.RT_DBNHASH):
+        for i in range(0, libwdb.RT_DBNHASH):
             dp = self.db_ip.contents.dbi_Head[i]
             while dp:
                 crt_dir = dp.contents
@@ -387,10 +384,10 @@ class WDB:
         )
         if isinstance(obj_list, str):
             obj_list = [obj_list]
-        idb_types, db_internals, dpp_list = zip(*[self._lookup_internal(obj) for obj in obj_list])
+        idb_types, db_internals, dpp_list = list(zip(*[self._lookup_internal(obj) for obj in obj_list]))
         if not idb_types:
             raise ValueError("No objects to hole !")
-        if any(map(lambda idb_type: idb_type != libwdb.ID_COMBINATION, idb_types)):
+        if any([idb_type != libwdb.ID_COMBINATION for idb_type in idb_types]):
             raise ValueError("All shapes should be combinations: {}".format(obj_list))
         dir_list = cta.ctypes_array(dpp_list)
         libwdb.make_hole(
@@ -402,7 +399,7 @@ class WDB:
         )
 
     def save(self, shape):
-        if SAVE_MAP.has_key(shape.__class__):
+        if shape.__class__ in SAVE_MAP:
             SAVE_MAP[shape.__class__](self, shape)
         else:
             raise NotImplementedError("Save not implemented for type: {0}".format(type(shape)))
