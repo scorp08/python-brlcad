@@ -5,7 +5,7 @@ import brlcad._bindings.libwdb as libwdb
 
 
 def ls(db_ip):
-    for i in xrange(0, libwdb.RT_DBNHASH):
+    for i in range(0, libwdb.RT_DBNHASH):
         dp = db_ip.contents.dbi_Head[i]
         while dp:
             crt_dir = dp.contents
