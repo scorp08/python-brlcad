@@ -1,7 +1,7 @@
 """
 Python wrappers for the ARS primitives of BRL-CAD.
 """
-from base import Primitive
+from .base import Primitive
 import numpy as np
 import brlcad.ctypes_adaptors as cta
 from brlcad.exceptions import BRLCADException

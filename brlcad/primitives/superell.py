@@ -1,7 +1,7 @@
 """
 Python wrappers for the SUPERELL primitives of BRL-CAD.
 """
-from base import Primitive
+from .base import Primitive
 from brlcad.vmath import Vector
 
 class Superell(Primitive):

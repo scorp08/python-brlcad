@@ -2,7 +2,7 @@
 Python wrapper for the TGC (Truncated General Cone) primitive of BRL-CAD.
 """
 
-from base import Primitive
+from .base import Primitive
 from brlcad.vmath import Vector
 
 

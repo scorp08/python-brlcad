@@ -1,7 +1,7 @@
 """
 Python wrappers for the Grip primitives of BRL-CAD.
 """
-from base import Primitive
+from .base import Primitive
 from brlcad.vmath import Vector
 import brlcad.ctypes_adaptors as cta
 

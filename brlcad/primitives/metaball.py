@@ -4,7 +4,7 @@ Python wrapper for the Metaball primitive of BRL-CAD.
 import collections
 import functools
 import types
-from base import Primitive
+from .base import Primitive
 from brlcad.vmath import Vector
 import ctypes
 import brlcad._bindings.librt as librt
@@ -50,7 +50,7 @@ class MetaballCtrlPoint(collections.Sequence):
         >>> x.is_same(MetaballCtrlPoint(("0, 0, 1", 1, 0)))
         True
         """
-        types.ListType,types.TupleType
+        list,tuple
         if isinstance(point, MetaballCtrlPoint):
             if copy:
                 return MetaballCtrlPoint(*point, copy=True)
@@ -58,8 +58,8 @@ class MetaballCtrlPoint(collections.Sequence):
                 return point
         result = collections.Sequence.__new__(cls)
         is_non_string_sequence = isinstance(point, collections.Sequence) and not isinstance(point, str)
-        if is_non_string_sequence and len(point) == 3 and isinstance(point[0], (types.ListType, types.TupleType,
-                                                                                types.StringType, Vector)):
+        if is_non_string_sequence and len(point) == 3 and isinstance(point[0], (list, tuple,
+                                                                                bytes, Vector)):
             # this means the parameters were wrapped in a sequence, so we unwrap them
             point, field_strength, sweat = point
         result.items = [Vector(point, copy=copy), float(field_strength), float(sweat)]
@@ -97,7 +97,7 @@ class Metaball(Primitive):
     def __init__(self, name, threshold=1, method=2, points=(((1, 1, 1), 1, 0), ((0, 0, 1), 2, 0)), copy=False):
         Primitive.__init__(self, name=name)
         if isinstance(points, list) and not copy:
-            for i in xrange(0, len(points)):
+            for i in range(0, len(points)):
                 points[i] = MetaballCtrlPoint(points[i])
         else:
             points = [MetaballCtrlPoint(point, copy=copy) for point in points]

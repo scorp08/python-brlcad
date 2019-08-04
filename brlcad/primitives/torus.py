@@ -2,7 +2,7 @@
 Python wrappers for the TOR and ETO primitives of BRL-CAD.
 """
 
-from base import Primitive
+from .base import Primitive
 from brlcad.vmath import Vector
 import numpy as np
 

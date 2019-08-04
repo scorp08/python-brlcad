@@ -5,29 +5,29 @@ import warnings
 
 import brlcad._bindings.librt as librt
 from brlcad.exceptions import BRLCADException
-from arb8 import ARB8
-from base import Primitive
-from arbn import ARBN
+from .arb8 import ARB8
+from .base import Primitive
+from .arbn import ARBN
 from brlcad.util import compare_version
-from ellipsoid import Ellipsoid, Sphere
-from rpc import RPC, RHC
-from vol import VOL
-from ars import ARS
-from half import Half
-from tgc import TGC
-from torus import Torus, ETO
-from epa import EPA, EHY
-from combination import Combination
-from hyperboloid import Hyperboloid
-from particle import Particle
-from pipe import Pipe
-from sketch import Sketch, Extrude, Revolve
-from superell import Superell
-from metaball import Metaball
-from ebm import EBM
-from grip import Grip
-from bot import BOT
-from submodel import Submodel
+from .ellipsoid import Ellipsoid, Sphere
+from .rpc import RPC, RHC
+from .vol import VOL
+from .ars import ARS
+from .half import Half
+from .tgc import TGC
+from .torus import Torus, ETO
+from .epa import EPA, EHY
+from .combination import Combination
+from .hyperboloid import Hyperboloid
+from .particle import Particle
+from .pipe import Pipe
+from .sketch import Sketch, Extrude, Revolve
+from .superell import Superell
+from .metaball import Metaball
+from .ebm import EBM
+from .grip import Grip
+from .bot import BOT
+from .submodel import Submodel
 
 
 MAGIC_TO_PRIMITIVE_TYPE = {
@@ -67,7 +67,7 @@ MAGIC_TO_PRIMITIVE_TYPE = {
     librt.ID_VOL: ("VOL", VOL, librt.RT_VOL_INTERNAL_MAGIC, librt.struct_rt_vol_internal),
     librt.ID_ARS: ("ARS", ARS, librt.RT_ARS_INTERNAL_MAGIC, librt.struct_rt_ars_internal),
     librt.ID_PNTS: ("PNTS", Primitive, librt.RT_PNTS_INTERNAL_MAGIC, librt.struct_rt_pnts_internal),
-    librt.ID_ANNOT: ("ANNOTATION", Primitive, librt.RT_ANNOT_INTERNAL_MAGIC, librt.struct_rt_annot_internal),
+    librt.ID_ANNOTATION: ("ANNOTATION", Primitive, librt.RT_ANNOTATION_INTERNAL_MAGIC, librt.struct_rt_annotation_internal),
     librt.ID_COMBINATION: ("COMBINATION", Combination, librt.RT_COMB_MAGIC, librt.struct_rt_comb_internal),
     librt.ID_CONSTRAINT: ("CONSTRAINT", Primitive, librt.RT_CONSTRAINT_MAGIC, librt.struct_rt_constraint_internal),
 }

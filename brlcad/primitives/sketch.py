@@ -4,7 +4,7 @@ Python wrapper for the Sketch, Extrude and Revolve primitives of BRL-CAD.
 import collections
 import numbers
 
-from base import Primitive
+from .base import Primitive
 from brlcad.vmath import Vector
 import brlcad._bindings.librt as librt
 import brlcad.ctypes_adaptors as cta
@@ -36,7 +36,7 @@ def create_uniform_knots(ctl_point_cnt, order):
     span = ctl_point_cnt - order + 1
     knot_vector = [0] * order
     if span > 0:
-        knot_vector += range(1, span)
+        knot_vector += list(range(1, span))
     else:
         span = 1
     knot_vector += [span] * (knot_count - len(knot_vector))
@@ -56,7 +56,7 @@ class Curve(collections.MutableSequence):
     def __init__(self, sketch, points, reverse=False, copy=False):
         self.sketch = sketch
         self._points = list(points) if copy or not isinstance(points, list) else points
-        for i in xrange(0, len(self._points)):
+        for i in range(0, len(self._points)):
             self._points[i] = sketch.vertex_index(self._points[i])
         self.reverse = reverse
 
@@ -252,7 +252,7 @@ class NURB(Curve):
         data = librt.cast(data, librt.POINTER(librt.struct_nurb_seg)).contents
         point_type = (data.pt_type >> 1) & 0x0f
         if bool(data.pt_type & 1):
-            weights = [data.weights[i] for i in xrange(0, data.c_size)]
+            weights = [data.weights[i] for i in range(0, data.c_size)]
             coordinate_count = 3
         else:
             weights = None
@@ -263,11 +263,11 @@ class NURB(Curve):
             )
         result = NURB(
             sketch,
-            points=[data.ctl_points[i] for i in xrange(0, data.c_size)],
+            points=[data.ctl_points[i] for i in range(0, data.c_size)],
             reverse=reverse,
             order=data.order,
             point_type=point_type,
-            knot_vector=[data.k.knots[i] for i in xrange(0, data.k.k_size)],
+            knot_vector=[data.k.knots[i] for i in range(0, data.k.k_size)],
             weights=weights
         )
         return result
@@ -337,7 +337,7 @@ class Bezier(Curve):
         data = librt.cast(data, librt.POINTER(librt.struct_bezier_seg)).contents
         return Bezier(
             sketch,
-            points=[data.ctl_points[i] for i in xrange(0, data.degree + 1)],
+            points=[data.ctl_points[i] for i in range(0, data.degree + 1)],
             reverse=reverse
         )
 
@@ -382,7 +382,7 @@ class Sketch(Primitive, collections.MutableSequence):
         elif not isinstance(curves, list):
             curves = list(curves)
         self.curves = curves
-        for i in xrange(0, len(curves)):
+        for i in range(0, len(curves)):
             self.add_curve_segment(curves[i], segment_index=i, copy=copy)
 
     def __repr__(self):
@@ -399,7 +399,7 @@ class Sketch(Primitive, collections.MutableSequence):
         value = Vector(value, copy=copy)
         if len(value) != 2:
             raise ValueError("Sketches need 2D vertexes, but got: {}".format(value))
-        for i in xrange(0, vertex_count):
+        for i in range(0, vertex_count):
             if self.vertices[i].is_same(value):
                 return i
         self.vertices.append(value)
@@ -467,7 +467,7 @@ class Sketch(Primitive, collections.MutableSequence):
         else:
             ci.reverse = None
             ci.segment = None
-        for i in xrange(0, ci.count):
+        for i in range(0, ci.count):
             curve = self.curves[i]
             ci.reverse[i] = bool(curve.reverse)
             ci.segment[i] = librt.cast(librt.pointer(curve.build_segment()), librt.c_void_p)
@@ -485,7 +485,7 @@ class Sketch(Primitive, collections.MutableSequence):
         curve_count = len(self.curves)
         if len(other.curves) != curve_count:
             return False
-        return all([self.curves[i].is_same(other.curves[i]) for i in xrange(0, curve_count)])
+        return all([self.curves[i].is_same(other.curves[i]) for i in range(0, curve_count)])
 
     def line(self, start, end, reverse=False, copy=False):
         return Line(self, [start, end], reverse=reverse, copy=copy)
@@ -517,13 +517,13 @@ class Sketch(Primitive, collections.MutableSequence):
     @staticmethod
     def from_wdb(name, data):
         vertices = []
-        for i in xrange(0, data.vert_count):
+        for i in range(0, data.vert_count):
             vertices.append(Vector(data.verts[i]))
         result = Sketch(
             name=name, base=Vector(data.V), u_vec=Vector(data.u_vec), v_vec=Vector(data.v_vec), vertices=vertices
         )
         curves = data.curve
-        for i in xrange(0, curves.count):
+        for i in range(0, curves.count):
             curve = curves.segment[i]
             magic = librt.cast(curve, librt.POINTER(librt.struct_line_seg)).contents.magic
             reverse = bool(curves.reverse[i])

@@ -1,7 +1,7 @@
 """
 Python wrappers for the Submodel primitives of BRL-CAD.
 """
-from base import Primitive
+from .base import Primitive
 from brlcad.vmath import Transform
 import numpy as np
 import brlcad.ctypes_adaptors as cta

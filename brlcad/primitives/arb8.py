@@ -4,7 +4,7 @@ This covers in fact the whole ARB4-ARB8 series of primitives, as all those are
 saved internally as ARB8.
 """
 
-from base import Primitive
+from .base import Primitive
 import numpy as np
 
 

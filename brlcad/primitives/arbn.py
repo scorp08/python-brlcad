@@ -2,7 +2,7 @@
 Python wrapper for the ARBN primitive of BRL-CAD.
 """
 
-from base import Primitive
+from .base import Primitive
 from brlcad.vmath import Plane
 
 

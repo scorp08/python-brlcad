@@ -4,7 +4,7 @@ Python wrapper for BOT (Bag of Triangles) primitives of BRL-CAD.
 import collections
 import numbers
 
-from base import Primitive
+from .base import Primitive
 from brlcad.vmath import Vector
 from brlcad.exceptions import BRLCADException
 import brlcad._bindings.libbu as libbu
@@ -23,7 +23,7 @@ class Face:
         if index==None:
             if len(vertices)==3:
                 self.index=[]
-                for i in xrange(0, len(self._points)):
+                for i in range(0, len(self._points)):
                     self.index.append(bot.vertex_index(self._points[i]))
             else:
                 raise BRLCADException("A face requires 3 vertices")
@@ -87,7 +87,7 @@ class BOT(Primitive):
         elif not isinstance(faces, list):
             curves = list(faces)
         self.faces = faces
-        for i in xrange(0, len(faces)):
+        for i in range(0, len(faces)):
                 self.add_face(faces[i])
 
     def __repr__(self):
@@ -142,7 +142,7 @@ class BOT(Primitive):
         value = Vector(value, copy=copy)
         if len(value) != 3:
             raise ValueError("A traingle needs 3D vertexes, but got: {}".format(value))
-        for i in xrange(0, vertex_count):
+        for i in range(0, vertex_count):
             if self.vertices[i].is_same(value):
                 return i
         self.vertices.append(value)
