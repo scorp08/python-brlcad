@@ -11,9 +11,7 @@ If don't already have python installed, please get the right version from:
 
 http://www.python.org/getit/
 
-Be sure you take the 2.7.x version and not 3.x.y, and that it is the right
-32 or 64 bit version matching your OS.
-
+This repo is compatible with python 3.x.y.
 Once you installed python, you'll also need to install pip - it doesn't come
 with the default installation.
 
@@ -91,12 +89,10 @@ You need then to find the PATH variable (or add it if it doesn't exist), and
 add `C:\MinGW\bin` at the end of it (separate it with a `;` if PATH already
 has some other entries).
 
-## installing python-brlcad
+## changes in python-brlcad.cfg 
 
-Run in a command window:
- 
-```
-C:\Python27\Scripts\pip.exe install --upgrade brlcad
-```
+You need to arrange your brl-cad path and gcc path in python-brlcad.cfg. 
+You can set prefix and win-path according to installation path of BRL-Cad and mingw.
+This repo is created based on BRL-Cad 7.24.0
 
 
