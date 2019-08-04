@@ -1,7 +1,7 @@
 # python-brlcad
-This is compatible with python 3.x.x .If there is an issue, please Pull
+This is compatible with python 3.x.x .If there is an issue, please Pull.
 Use [brlcad](http://brlcad.org/) from python based on ctypes bindings. These
-ctypes bindings are generated during install-time using.
+ctypes bindings are generated during install-time using ctypesgen.
 [ctypesgen] is used from https://github.com/olsonse/ctypesgen.
 
 ## installing
