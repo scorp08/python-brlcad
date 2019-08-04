@@ -31,9 +31,13 @@ def run_after(command):
     #library_path = os.path.abspath(os.path.dirname(brlcad.__file__))
     egg_path = glob.glob(os.path.join(command.install_lib, "brlcad*.egg/"))[0]
     library_path = os.path.join(egg_path, "brlcad")
+    
+    
 
     try:
+        
         brlcad.install.post_install.main(library_path)
+        
     except Exception:
         traceback.print_exc()
 
@@ -104,11 +108,10 @@ class CustomInstallCommand(InstallCommand):
 
 setup(
     name="brlcad",
-    version="0.0.1",
-    description="An attempt at a post-install script.",
-    author="Bryan Bishop",
-    author_email="kanzure@gmail.com",
-    url="https://github.com/kanzure/python-brlcad",
+    version="0.0.2",
+    description="Brlcad for py3.",
+    author_email="ozosen2@gmail.com",
+    url="https://github.com/scorp08/python-brlcad",
     packages=[
         "brlcad",
         "brlcad.install",
@@ -117,13 +120,14 @@ setup(
     ],
     zip_safe=False,
     setup_requires=[
-        "ctypesgen-dev",
+        "ctypesgen",
     ],
     install_requires=[
-        "ctypesgen-dev",
+        "ctypesgen",
     ],
     dependency_links=[
-        "https://github.com/kanzure/ctypesgen/tarball/short-preamble-setuptools#egg=ctypesgen-dev-0.0.1",
+        "https://github.com/olsonse/ctypesgen/tarball/master#egg=ctypesgen",
+
     ],
     cmdclass={
         "install": CustomInstallCommand,

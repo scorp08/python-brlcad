@@ -11,7 +11,8 @@ If don't already have python installed, please get the right version from:
 
 http://www.python.org/getit/
 
-The repo is comptaible with python 3, therefore you should install python 3.x.x
+Be sure you take the 2.7.x version and not 3.x.y, and that it is the right
+32 or 64 bit version matching your OS.
 
 Once you installed python, you'll also need to install pip - it doesn't come
 with the default installation.
@@ -92,10 +93,10 @@ has some other entries).
 
 ## installing python-brlcad
 
-Run setup.py from command window (locate the directory of brl-cad) using 
+Run in a command window:
  
 ```
-python setup.py install
+C:\Python27\Scripts\pip.exe install --upgrade brlcad
 ```
 
 
