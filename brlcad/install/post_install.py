@@ -16,9 +16,9 @@ import logging
 import imp
 import shutil
 
-import ctypesgencore
+import ctypesgen
 
-from options import load_ctypesgen_options, load_config
+from .options import load_ctypesgen_options, load_config
 
 
 def setup_logging(level=logging.DEBUG):
@@ -44,19 +44,20 @@ def generate_wrapper(ctypesgen_options, logger):
     """
     Generate a ctypes wrapper around a specific library.
 
-    @param ctypesgen_options: the ctypesgencore options
+    @param ctypesgen_options: the ctypesgen options
     """
     # parse
     logger.debug("parsing")
-    descriptions = ctypesgencore.parser.parse(ctypesgen_options.headers, ctypesgen_options)
+    descriptions = ctypesgen.parser.parse(ctypesgen_options.headers, ctypesgen_options)
+    
 
     # process
     logger.debug("processing")
-    ctypesgencore.processor.process(descriptions, ctypesgen_options)
+    ctypesgen.processor.process(descriptions, ctypesgen_options)
 
     # print
     logger.debug("printing")
-    ctypesgencore.printer_python.WrapperPrinter(ctypesgen_options.output, ctypesgen_options, descriptions)
+    ctypesgen.printer_python.WrapperPrinter(ctypesgen_options.output, ctypesgen_options, descriptions)
 
 
 def cleanup_bindings_dir(bindings_path, cached_bindings_path, logger):
@@ -97,10 +98,12 @@ def main(library_path, logger=None):
     if not logger:
         logger = setup_logging()
 
-    logger.debug("ctypesgencore version is {0}".format(ctypesgencore.__version__))
+    logger.debug("ctypesgen version is {0}".format(ctypesgen.__version__))
 
     # this is where the generated files are placed
     bindings_path = os.path.join(library_path, "_bindings")
+    
+    print("buradayım"," ",bindings_path)
     logger.debug("bindings_path is {0}".format(bindings_path))
 
     # read configuration
@@ -119,6 +122,7 @@ def main(library_path, logger=None):
         cleanup_bindings_dir(bindings_path, cached_bindings_path, logger=logger)
     # find brl-cad installation and set up ctypesgen options
     ctypesgen_library_options, options_map, brlcad_info = load_ctypesgen_options(bindings_path, config, logger)
+    
 
     # Holds the name of a module and the names that the module defines.
     symbol_map = {}
@@ -155,6 +159,7 @@ def main(library_path, logger=None):
         # types are already cached, so it's probably okay for the moment.
 
         # generate the wrapper bindings (woot)
+        os.chdir(brlcad_info["bindir"])
         generate_wrapper(ctypesgen_options, logger=logger)
         generated_libraries.append(lib_name)
         logger.debug("Done generating the wrapper file for {0}".format(lib_name))

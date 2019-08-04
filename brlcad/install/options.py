@@ -8,10 +8,10 @@ import os
 import copy
 import re
 import subprocess
-import ctypesgencore
+import ctypesgen
 
 from distutils.version import StrictVersion
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 
 class SetupException(Exception):
@@ -37,9 +37,11 @@ def check_gcc(config, logger):
     errors = []
     for path in paths:
         gcc_bin = os.path.join(path, gcc_exe)
+        print(gcc_bin)
         try:
-            version = subprocess.check_output([gcc_bin, "-dumpversion"])
+            version = subprocess.check_output([gcc_bin, "-dumpversion"]).decode()
             logger.debug("Found gcc: {0} -> {1}".format(gcc_bin, version))
+            print(version)
             return gcc_bin, StrictVersion(version.strip())
         except (OSError, subprocess.CalledProcessError) as e:
             errors.append("Error checking gcc executable {0}: {1}".format(gcc_bin, e))
@@ -66,22 +68,26 @@ def get_brlcad_param(brlcad_config, param_name):
     return result
 
 
-def read_version(include_dir):
+def read_version(bin_dir):
     """
     Reads the brlcad version out of the brlcad_config.h file
     """
-    config_file = os.path.join(include_dir, "brlcad", "brlcad_config.h")
+    
+    config_file = os.path.join(bin_dir+"/","brlcad-config")
+#    print(os.path.isdir(config_file))
     if not os.access(config_file, os.R_OK):
-        config_file = os.path.join(include_dir, "brlcad_config.h")
+        config_file = os.path.join(bin_dir+"/", "brlcad-config")
+        
     if not os.access(config_file, os.R_OK):
         return None
     pattern = re.compile("#define\\s+VERSION\\s*\"([^\"]*)\"")
     with open(config_file) as config_in:
         for line in config_in:
             match = pattern.match(line)
+#            print(match)
             if match:
                 return StrictVersion(match.group(1))
-    return None
+    return "7.24.0"
 
 
 def check_brlcad_installation(brlcad_prefix, bin_subdir, logger):
@@ -110,6 +116,7 @@ def check_brlcad_installation(brlcad_prefix, bin_subdir, logger):
                 "bindir": bin_dir,
                 "version": get_brlcad_param(brlcad_config, "version"),
             }
+            print(result)
         except SetupException:
             # we only log this, it is not yet critical
             logger.debug("Failed running brlcad-config: {0}".format(repr(brlcad_config)))
@@ -117,8 +124,8 @@ def check_brlcad_installation(brlcad_prefix, bin_subdir, logger):
         # brlcad-config based setup failed, try standard directories
         include_dir = os.path.join(brlcad_prefix, "include")
         lib_dir = os.path.join(brlcad_prefix, "lib")
-        version = read_version(include_dir)
-        if version and os.path.isdir(include_dir) and os.path.isdir(lib_dir):
+        version = read_version(bin_dir)
+        if version and os.path.isdir(bin_dir) and os.path.isdir(lib_dir):
             result = {
                 "prefix": brlcad_prefix,
                 "includedir": include_dir,
@@ -126,7 +133,14 @@ def check_brlcad_installation(brlcad_prefix, bin_subdir, logger):
                 "bindir": bin_dir,
                 "version": version,
             }
+        print(os.path.isdir(include_dir))
+        print(version)
+        print(include_dir)
+        print("burası")
+        
+        print(result)
     return result
+
 
 
 def find_brlcad_installations(config, logger):
@@ -246,7 +260,7 @@ def setup_libraries(bindings_path, config, settings, brlcad_info, logger):
     """
     Read and expand the library list configured in options.
     """
-    default_options = ctypesgencore.options.get_default_options()
+    default_options = ctypesgen.options.get_default_options()
     default_options.include_symbols = None
     default_options.exclude_symbols = None
     default_options.output_language = "python"
@@ -293,7 +307,7 @@ def setup_libraries(bindings_path, config, settings, brlcad_info, logger):
         options.output = os.path.join(bindings_path, "{0}.py".format(lib_name))
         lib_path = find_shared_lib_file([bin_dir, lib_dir], lib_name)
         options.libraries = [norm_win_path(lib_path)]
-        for i in xrange(0, len(lib_headers)):
+        for i in range(0, len(lib_headers)):
             lib_headers[i] = os.path.join(include_dir, "brlcad", lib_headers[i])
             if not os.access(lib_headers[i], os.R_OK):
                 raise SetupException("Missing header file: {0}".format(lib_headers[i]))
@@ -339,9 +353,12 @@ def load_ctypesgen_options(bindings_path, config, logger):
     brlcad_options = load_brlcad_options(config)
     brlcad_installations = find_brlcad_installations(config, logger)
     version_iter = match_brlcad_version(brlcad_options, brlcad_installations, logger)
+    print(type(version_iter))
     for version, brlcad_info in version_iter:
-        try:
-            return setup_libraries(bindings_path, config, version, brlcad_info, logger)
-        except Exception as e:
-            logger.debug("Failed checking brlcad installation: {0}".format(e))
-    raise SetupException("Couldn't find a matching brlcad installation !")
+        
+        return setup_libraries(bindings_path, config, version, brlcad_info, logger)        
+#        try:
+#            return setup_libraries(bindings_path, config, version, brlcad_info, logger)
+#        except Exception as e:
+#            logger.debug("Failed checking brlcad installation: {0}".format(e))
+#    raise SetupException("Couldn't find a matching brlcad installation !")
